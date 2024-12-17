@@ -2,8 +2,6 @@
 
 namespace App;
 
-use InvalidArgumentException;
-
 /**
  * Mailer
  *

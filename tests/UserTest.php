@@ -1,18 +1,25 @@
 <?php
 
-use App\User;
-use App\Mailer;
 use PHPUnit\Framework\TestCase;
+use App\User;
 
-class UserTest extends TestCase{
-    public function testNotifyReturnsTrue(){
-        $user = new User("jane.panov@peopleweek.com");
-        $user->setMailerCallable(function (){
-            echo "mocked";
+class UserTest extends TestCase
+{
+    public function tearDown(): void
+    {
+        Mockery::close();
+    }
 
-            return true;
-        });
+    public function testNotifyReturnsTrue()
+    {
+        $user = new User('dave@example.com');
 
-        $this->assertTrue($user->notify('Hello'));
+        $mock = Mockery::mock('alias:Mailer');
+
+        $mock->shouldReceive('send')
+            ->with($user->email, 'Hello!')
+            ->andReturn(true);
+
+        $this->assertTrue($user->notify('Hello!'));
     }
 }
