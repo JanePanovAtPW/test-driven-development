@@ -7,12 +7,11 @@ use PHPUnit\Framework\TestCase;
 class UserTest extends TestCase{
     public function testNotifyReturnsTrue(){
         $user = new User("jane.panov@peopleweek.com");
+        $user->setMailerCallable(function (){
+            echo "mocked";
 
-        $mailer = $this->createMock(Mailer::class);
-        $mailer->expects($this->once())
-            ->method('send')
-            ->willReturn(true);
-        $user->setMailer($mailer);
+            return true;
+        });
 
         $this->assertTrue($user->notify('Hello'));
     }
